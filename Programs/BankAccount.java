@@ -9,13 +9,13 @@ class BankAccount {
     public BankAccount(String accountNumber, String pin, double initialBalance) {
         this.accountNumber = accountNumber;
         this.pin = pin;
-        this.balance = initialBalance;
+        this.balance = 
+        ;
     }
 
     // Method to perform a withdrawal
     public boolean withdraw(double amount) {
         if (amount > 0 && amount <= balance) {
-            balance -= amount;
             return true;
         } else {
             return false;
