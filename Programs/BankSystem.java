@@ -10,13 +10,10 @@ import javax.swing.plaf.metal.*;
 
 public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
-	//Main Place on Form where All Child Forms will Shown.
 	private JDesktopPane desktop = new JDesktopPane ();
 
-	//For Program's MenuBar.
 	private JMenuBar bar;
 
-	//All the Main Menu of the Program.
 	private JMenu mnuFile, mnuEdit, mnuView, mnuOpt, mnuWin, mnuHelp;
 
 	private JMenuItem addNew, printRec, end;				//File Menu Options.
@@ -26,80 +23,56 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	private JMenuItem close, closeAll;					//Window Menu Options.
 	private	JMenuItem content, keyHelp, about;				//Help Menu Options.
 
-	//PopupMenu of Program.
 	private JPopupMenu popMenu = new JPopupMenu ();
 
-	//MenuItems for PopupMenu of the Program.
 	private JMenuItem open, report, dep, with, del, find, all;
 
-	//For Program's ToolBar.
 	private	JToolBar toolBar;
-
-	//For ToolBar's Button.
 	private	JButton btnNew, btnDep, btnWith, btnRec, btnDel, btnSrch, btnHelp, btnKey;
 
-	//Main Form StatusBar where Program's Name & Welcome Message Display.
+
 	private JPanel statusBar = new JPanel ();
 
-	//Labels for Displaying Program's Name & saying Welcome to Current User on StatusBar.
 	private JLabel welcome;
 	private JLabel author;
 
-	//Making the LookAndFeel Menu.
 	private String strings[] = {"1. Metal", "2. Motif", "3. Windows"};
 	private UIManager.LookAndFeelInfo looks[] = UIManager.getInstalledLookAndFeels ();
 	private ButtonGroup group = new ButtonGroup ();
 	private JRadioButtonMenuItem radio[] = new JRadioButtonMenuItem[strings.length];
 
-	//Getting the Current System Date.
 	private java.util.Date currDate = new java.util.Date ();
 	private SimpleDateFormat sdf = new SimpleDateFormat ("dd MMMM yyyy", Locale.getDefault());
 	private String d = sdf.format (currDate);
 
-	//Following all Variables are use in BankSystem's IO's.
-
-	//Variable use in Reading the BankSystem Records File & Store it in an Array.
 	private int count = 0;
 	private int rows = 0;
 	private	int total = 0;
 
-	//String Type Array use to Load Records From File.
 	private String records[][] = new String [500][6];
 
-	//Variable for Reading the BankSystem Records File.
 	private FileInputStream fis;
 	private DataInputStream dis;
 
-	//Constructor of The Bank Program to Iniatilize all Variables of Program.
-
 	public BankSystem () {
 
-		//Setting Program's Title.
 		super ("BankSystem [Pvt] Limited.");
 
 		UIManager.addPropertyChangeListener (new UISwitchListener ((JComponent)getRootPane()));
 
-		//Creating the MenuBar.
 		bar = new JMenuBar ();
-
-		//Setting the Main Window of Program.
 		setIconImage (getToolkit().getImage ("Images/Bank.gif"));
 		setSize (700, 550);
 		setJMenuBar (bar);
-
-		//Closing Code of Main Window.
 		addWindowListener (new WindowAdapter () {
 			public void windowClosing (WindowEvent we) {
 				quitApp ();
 			}
 		}
 		);
-
-		//Setting the Location of Application on Screen.
 		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width  - getWidth()) / 2,
 			(Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2);
 
-		//Creating the MenuBar Items.
 		mnuFile = new JMenu ("File");
 		mnuFile.setMnemonic ((int)'F');
 		mnuEdit = new JMenu ("Edit");
@@ -113,8 +86,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		mnuHelp = new JMenu ("Help");
 		mnuHelp.setMnemonic ((int)'H');
 
-		//Creating the MenuItems of Program.
-		//MenuItems for FileMenu.
 		addNew = new JMenuItem ("Open New Account", new ImageIcon ("Images/Open.gif"));
 		addNew.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK));
 		addNew.setMnemonic ((int)'N');
@@ -127,8 +98,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		end.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
 		end.setMnemonic ((int)'Q');	
 		end.addActionListener (this);
-
-		//MenuItems for EditMenu.
 		deposit = new JMenuItem ("Deposit Money");
 		deposit.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
 		deposit.setMnemonic ((int)'T');
@@ -149,8 +118,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		searchName.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
 		searchName.setMnemonic ((int)'M');
 		searchName.addActionListener (this);
-
-		//MenuItems for ViewMenu.
 		oneByOne = new JMenuItem ("View One By One");
 		oneByOne.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
 		oneByOne.setMnemonic ((int)'O');	
@@ -160,7 +127,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		allCustomer.setMnemonic ((int)'A');
 		allCustomer.addActionListener (this);
 
-		//MenuItems for OptionMenu.
 		change = new JMenuItem ("Change Background Color");
 		change.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK));
 		change.setMnemonic ((int)'B');
@@ -169,18 +135,16 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		style = new JMenu ("Change Layout Style");
 		style.setMnemonic ((int)'L');
 		for( int i = 0; i < radio.length ; i++ ) {			//Creating the subMenus of Style Menu.
-			radio[i] = new JRadioButtonMenuItem (strings[i]);	//Build an Array of Layouts to Apply.
-			radio[i].addItemListener (this);			//Setting their Actions.
-			group.add (radio[i]);					//Making them Grouped.
-			style.add (radio[i]);					//Adding to Style MenuOption.
+			radio[i] = new JRadioButtonMenuItem (strings[i]);	
+			radio[i].addItemListener (this);		
+			group.add (radio[i]);					
+			style.add (radio[i]);					
 		}
-		//SubMenu of Theme For Applying different Themes to Program By Building an Array of Themes to Apply.
 		MetalTheme[] themes = { new DefaultMetalTheme(), new GreenTheme(), new AquaTheme(), 
 					new SandTheme(), new SolidTheme(), new MilkyTheme(), new GrayTheme() };
-		theme = new MetalThemeMenu ("Apply Theme", themes);		//Putting the Themes in ThemeMenu.
+		theme = new MetalThemeMenu ("Apply Theme", themes);		
 		theme.setMnemonic ((int)'M');
 
-		//MenuItems for WindowMenu.
 		close = new JMenuItem ("Close Active Window");
 		close.setMnemonic ((int)'C');
 		close.addActionListener (this);
@@ -188,7 +152,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		closeAll.setMnemonic ((int)'A');
 		closeAll.addActionListener (this);
 
-		//MenuItems for HelpMenu.
 		content = new JMenuItem ("Help Contents", new ImageIcon ("Images/paste.gif"));
 		content.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_H, Event.CTRL_MASK));
 		content.setMnemonic ((int)'H');
@@ -201,16 +164,11 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		about.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
 		about.setMnemonic ((int)'C');
 		about.addActionListener (this);
-
-		//Adding MenuItems to Menu.
-		//File Menu Items.
 		mnuFile.add (addNew);
 		mnuFile.addSeparator ();
 		mnuFile.add (printRec);
 		mnuFile.addSeparator ();
 		mnuFile.add (end);
-
-		//Edit Menu Items.
 		mnuEdit.add (deposit);
 		mnuEdit.add (withdraw);
 		mnuEdit.addSeparator ();
@@ -219,30 +177,25 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		mnuEdit.add (search);
 		mnuEdit.add (searchName);
 
-		//View Menu Items.
 		mnuView.add (oneByOne);
 		mnuView.addSeparator ();
 		mnuView.add (allCustomer);
 
-		//Options Menu Items.
 		mnuOpt.add (change);
 		mnuOpt.addSeparator ();
 		mnuOpt.add (style);
 		mnuOpt.addSeparator ();
 		mnuOpt.add (theme);
 
-		//Window Menu Items.
 		mnuWin.add (close);
 		mnuWin.add (closeAll);
 
-		//Help Menu Items.
 		mnuHelp.add (content);
 		mnuHelp.addSeparator ();
 		mnuHelp.add (keyHelp);
 		mnuHelp.addSeparator ();
 		mnuHelp.add (about);
 
-		//Adding Menues to Bar.
 		bar.add (mnuFile);
 		bar.add (mnuEdit);
 		bar.add (mnuView);
@@ -250,7 +203,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		bar.add (mnuWin);
 		bar.add (mnuHelp);
 
-		//MenuItems for PopupMenu.
 		open = new JMenuItem ("Open New Account", new ImageIcon ("Images/Open.gif"));
 		open.addActionListener (this);
 		report = new JMenuItem ("Print BankSystem Report", new ImageIcon ("Images/New.gif"));
@@ -266,7 +218,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		all = new JMenuItem ("View All Customer", new ImageIcon ("Images/refresh.gif"));
 		all.addActionListener (this);
 
-		//Adding Menues to PopupMenu.
 		popMenu.add (open);
 		popMenu.add (report);
 		popMenu.add (dep);
@@ -505,9 +456,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		}
 
 	}
-
-	//Function Perform By LookAndFeel Menu.
-
 	public void itemStateChanged (ItemEvent e) {
 
 		for( int i = 0; i < radio.length; i++ )
@@ -517,21 +465,17 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	}	
 
-	//Function For Closing the Program.
-
 	private void quitApp () {
 
 		try {
-			//Show a Confirmation Dialog.
 		    	int reply = JOptionPane.showConfirmDialog (this,
 					"Are you really want to exit\nFrom BankSystem?",
 					"BankSystem - Exit", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-			//Check the User Selection.
 			if (reply == JOptionPane.YES_OPTION) {
-				setVisible (false);	//Hide the Frame.
-				dispose();            	//Free the System Resources.
+				setVisible (false);
+				dispose();            	
 				System.out.println ("Thanks for Using BankSystem\nAuthor - Muhammad Wasif Javed");
-				System.exit (0);        //Close the Application.
+				System.exit (0);        
 			}
 			else if (reply == JOptionPane.NO_OPTION) {
 				setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -541,9 +485,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		catch (Exception e) {}
 
 	}
-
-	//Function for Changing the Program's Look.
-
 	public void changeLookAndFeel (int val) {
 
 		try {
@@ -553,8 +494,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		catch (Exception e) { }
 
 	}
-
-	//Loop Through All the Opened JInternalFrame to Perform the Task.
 
 	private boolean openChildWindow (String title) {
 
@@ -568,8 +507,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		return false;
 
 	}
-
-	//Following Functions use for Printing Records & Report of BankSystem.
 
 	void getAccountNo () {
 
@@ -595,8 +532,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		}
 
 	}
-
-	//Function use to load all Records from File when Application Execute.
 
 	boolean populateArray () {
 
@@ -632,7 +567,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	}
 
-	//Function use to Find Record by Matching the Contents of Records Array with InputBox.
 
 	void findRec (String rec) {
 
@@ -652,7 +586,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	}
 
-	//Function use to make Current Record ready for Print.
 
 	String makeRecordPrint (int rec) {
 
@@ -675,7 +608,6 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	}
 
-	//Function use to Print the Current Record.
 
 	void printRecord (String rec) {
 
