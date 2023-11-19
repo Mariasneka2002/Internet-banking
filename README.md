@@ -8,3 +8,5 @@ DEMO LINKS:
 file:///C:/Users/User/Desktop/Internet%20banking/index.html
 
 file:///C:/Users/User/Desktop/Internet%20banking/Programs/Account.html
+
+file:///C:/Users/User/Desktop/Internet%20banking/Dashboard.html
