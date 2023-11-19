@@ -4,3 +4,5 @@ The project ensures the atomicity of the transactions and also ensures security 
 This project in particular adds many other features like small-credit, auto-debit, auto-credit and loan facility.
 
 DEMO LINKS:
+file:///C:/Users/User/Desktop/Internet%20banking/index.html
+file:///C:/Users/User/Desktop/Internet%20banking/Programs/Account.html
